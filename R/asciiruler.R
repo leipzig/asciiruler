@@ -1,17 +1,17 @@
 #' Generate an ascii ruler
 #' 
-#''   \preformatted{v borders
+#''   \preformatted{
+#''   v borders
 #''   +-----------------------------------------------------------------+<-borders
 #''   |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||<-dense_ticks
 #''   |  |    |    |    |    |    |    |    |    |    |    |    |    |  |<-sparse_ticks
 #''   |-30       -20       -10         0         10        20        30 |
 #''   +-----------------------------------------------------------------+<-borders
 #''   }
-#'   @param low range start
-#'   @param high range end
+#'   @param low, high range start and end
 #'   @param sparse_ticks intermittent ticks appear every sparse_ticks, set to 0 to hide row
 #'   @param dense_ticks display a row of ticks at every position
-#'   @param block_ticks break up the ruler with a space every block_ticks encountered, a multiple of sparse_ticks, set to 0 to disable
+#'   @param block_space break up the ruler with a space every block_space blocks encountered, a multiple of sparse_ticks, set to 0 to disable
 #'   @param display borders
 #'   @param numbers_down display the ruler so the numbers are below the ticks
 #'   @param line_break the line break character(s)
@@ -19,7 +19,7 @@
 #'   @examples
 #'   asciiruler(low=-30,high=30,borders=TRUE)
 #'   @references Inspired by \code{\url{http://codegolf.stackexchange.com/questions/4910/ascii-ruler-generation}}
-asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_ticks=0L,borders=FALSE,numbers_down=TRUE,line_break="\n"){
+asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_space=0L,borders=FALSE,numbers_down=TRUE,line_break="\n"){
   if(borders){e<-'|'}else{e<-''}
   b<-'|'
   p<-"+"
@@ -27,30 +27,28 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_tick
   w<-' '
   
 
-  repme<-function(this,manyTimes){
-    return(glue(rep(this,manyTimes)))
-  }
+
 
   pad<-function(i){
     #returns special right flank padding for ends and kingpin
     right_flank<-function(x){
       #last number should be right flanked to get to high but no further
-      if(x<high & x+sparse_ticks>high){return(glue(repme(w,abs(high-x))))}
+      if(x<high & x+sparse_ticks>high){return(asciiruler:::glue(asciiruler:::repme(w,abs(high-x))))}
       #the highest non-positive position
       #should be flanked by spaces on both sides
-      if(x<=0 & x+sparse_ticks>0){return(glue(repme(w,sparse_ticks-1)))}
+      if(x<=0 & x+sparse_ticks>0){return(asciiruler:::glue(asciiruler:::repme(w,sparse_ticks-1)))}
       return('')
     }
     #adjust for possible block spacing
     blockpad<-function(i){
       #first number - don't pad
-      if(i==low | block_ticks==0){
-        return('%s')
+      if(i==low | block_space==0){
+        return('')
       }
-      if(((i-low) %% (sparse_ticks*block_ticks)) == 0){
-        return(glue('%',(sparse_ticks+1),'s'))
+      if(((i-low) %% (sparse_ticks*block_space)) == 0){
+        return(w)
       }
-      return('%s')
+      return('')
     }
     #> sprintf('%10s',-10)
     #[1] "       -10"
@@ -62,25 +60,25 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_tick
       if(i+sparse_ticks>high){
         return('%s')
       }else{
-        glue('%',d[i>0],sparse_ticks,'s')
+        asciiruler:::glue('%',d[i>0],sparse_ticks,'s')
       }
     }
-    sprintf(blockpad(i),glue(sprintf(left_or_right(i),i),right_flank(i)))
+    asciiruler:::glue(blockpad(i),sprintf(left_or_right(i),i),right_flank(i))
   }  
-  numbers<-glue(str_trim(glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left"))
+  numbers<-asciiruler:::glue(str_trim(asciiruler:::glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left"))
   if(substr(numbers,1,1)==d){left_margin<-unname(str_locate(numbers,w)[1,"start"])-2}else{left_margin<-0}
 
   n<-str_length(numbers)
   
-  tb_border<-glue(p,glue(repme(d,n)),p)
-  sparse_tick_marks<-glue(e,repme(w,left_margin),substr(blocks(glue(repme(glue(b,repme(w,sparse_ticks-1)),n)),blocksize=block_ticks*sparse_ticks),1,n-left_margin),e)
+  tb_border<-asciiruler:::glue(p,asciiruler:::glue(asciiruler:::repme(d,n)),p)
+  sparse_tick_marks<-asciiruler:::glue(e,asciiruler:::repme(w,left_margin),substr(asciiruler:::blocks(asciiruler:::glue(asciiruler:::repme(asciiruler:::glue(b,asciiruler:::repme(w,sparse_ticks-1)),n)),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
   
-  #prefer to see dense ticks even before the 0 in -30 unless dealing with blocks
-  edge_ticks<-function(){if(block_ticks>0){return(w)}else{return(b)}}
+  #prefer to see dense ticks even before the 0 in -30 unless dealing with asciiruler:::blocks
+  edge_ticks<-function(){if(block_space>0){return(w)}else{return(b)}}
   
-  dense_tick_marks<-glue(e,repme(edge_ticks(),left_margin),substr(blocks(repme(b,n),blocksize=block_ticks*sparse_ticks),1,n-left_margin),e)
+  dense_tick_marks<-asciiruler:::glue(e,asciiruler:::repme(edge_ticks(),left_margin),substr(asciiruler:::blocks(asciiruler:::repme(b,n),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
   width<-str_length(dense_tick_marks)
-  numbers<-glue(e,numbers,e)
+  numbers<-asciiruler:::glue(e,numbers,e)
   sparse_bool<-!(is.null(sparse_ticks) | sparse_ticks==0)
   log_vector<-c(borders,dense_ticks,sparse_bool,TRUE,borders)
   content<-c(tb_border,dense_tick_marks,sparse_tick_marks,numbers,tb_border)[log_vector]
@@ -135,25 +133,25 @@ genbank_seqblock<-function(string,start=1L,end=-1L,blocksize=10L,width=60L,sep="
   #if a seq ends at 1000-1060 and width is 60 it must be at least 4 digits wide
   offset_char_width<-str_length(as.character(end-width))
   linestarts<-seq(start,end,by=width)
-  linenumbers<-sprintf(glue('%',offset_char_width,'s'),linestarts)
-  lineends<-seq_inclusive(from=start+width-1,to=end,by=width)
+  linenumbers<-sprintf(asciiruler:::glue('%',offset_char_width,'s'),linestarts)
+  lineends<-asciiruler:::seq_inclusive(from=start+width-1,to=end,by=width)
   lines<-substring(subseq,linestarts,lineends)
 
-  textblocks<-sapply(lines,blocks,sep=sep,blocksize=blocksize)
-  #paste(unname(sapply(lines,blocks)),collapse=line_break)
+  textblocks<-sapply(lines,asciiruler:::blocks,sep=sep,blocksize=blocksize)
   bound<-rbind(num=linenumbers,text=textblocks)
-  ascii<-
+  ascii<-''
   if(ruler){
-    ascii<-asciiruler(1,high=width,sparse_ticks=5,block_ticks=2,numbers_down=FALSE)
-    asciishift<-paste(repme(' ',offset_char_width),ascii$content,collapse=line_break)
+    ascii<-asciiruler(1,high=width,sparse_ticks=5,block_space=2,numbers_down=FALSE)
+    asciishift<-paste(asciiruler:::repme(' ',offset_char_width),ascii$content,collapse=line_break)
+    return(paste(asciishift,paste(as.list(bound[1,]),as.list(bound[2,]),sep=" ",collapse=line_break),sep=line_break))
   }
-  return(paste(asciishift,paste(as.list(bound[1,]),as.list(bound[2,]),sep=" ",collapse=line_break),sep=line_break))
+  return(paste(as.list(bound[1,]),as.list(bound[2,]),sep=" ",collapse=line_break))
 }
 
 #' This is like seq except it will always include the 'to'
 #' > seq(1,30,by=10)
 #' [1]  1 11 21
-#' > seq_inclusive(1,30,by=10)
+#' > asciiruler:::seq_inclusive(1,30,by=10)
 #' [1]  1 11 21 31
 #' @param from, to start and end values
 #' @param by increment value
@@ -173,6 +171,9 @@ glue<-function(...,sep="",collapse=""){
   do.call("paste", c(strings, list(sep = sep, collapse = collapse)))
 }
 
+repme<-function(this,manyTimes){
+  return(asciiruler:::glue(rep(this,manyTimes)))
+}
 
 #' Break line of text into blocks of size blocksize
 #' @param line text
@@ -182,6 +183,6 @@ blocks<-function(line,blocksize=10L,sep=" "){
     if(blocksize<=0){return(line)}
     blockstarts<-seq(1,str_length(line),by=blocksize)
     minLength<-max(blocksize,str_length(line))
-    blockends<-seq_inclusive(from=blocksize,to=minLength,by=blocksize)
+    blockends<-asciiruler:::seq_inclusive(from=blocksize,to=minLength,by=blocksize)
     paste(substring(line,blockstarts,blockends),collapse=sep)
 }
