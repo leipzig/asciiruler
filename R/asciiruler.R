@@ -26,6 +26,8 @@
 #'   @examples
 #'   asciiruler(low=-30,high=30,borders=TRUE)
 #'   @references Inspired by \code{\url{http://codegolf.stackexchange.com/questions/4910/ascii-ruler-generation}}
+#'   @import stringr
+#'   @export
 asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_space=0L,borders=FALSE,numbers_down=TRUE,line_break="\n",strict_width=FALSE){
   if(borders){e<-'|'}else{e<-''}
   b<-'|'
@@ -36,10 +38,10 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
     #returns special right flank padding for ends and kingpin
     right_flank<-function(x){
       #last number should be right flanked to get to high but no further
-      if(x<high & x+sparse_ticks>high){return(asciiruler:::spaces(abs(high-x-str_length(as.character(x))+1)))}
+      if(x<high & x+sparse_ticks>high){return(spaces(abs(high-x-str_length(as.character(x))+1)))}
       #the highest non-positive position
       #should be flanked by spaces on both sides
-      if(x<=0 & x+sparse_ticks>0){return(asciiruler:::spaces(sparse_ticks-1))}
+      if(x<=0 & x+sparse_ticks>0){return(spaces(sparse_ticks-1))}
       return('')
     }
     #adjust for possible block spacing
@@ -63,7 +65,7 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
       if(i+sparse_ticks>high){
         return('%s')
       }else{
-        asciiruler:::glue('%',d[i>0],sparse_ticks,'s')
+        glue('%',d[i>0],sparse_ticks,'s')
       }
     }
     
@@ -71,9 +73,9 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
       if((i==low | i==high) & str_length(as.character(i))>1 & strict_width==TRUE){return('_')}
       return(i)
     }
-    asciiruler:::glue(blockpad(i),sprintf(left_or_right(i),strictify(i)),right_flank(i))
+    glue(blockpad(i),sprintf(left_or_right(i),strictify(i)),right_flank(i))
   }  
-  numbers<-str_replace_all(asciiruler:::glue(str_trim(asciiruler:::glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left")),'_',' ')
+  numbers<-str_replace_all(glue(str_trim(glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left")),'_',' ')
   if(substr(numbers,1,1)==d){
     left_margin<-unname(str_locate(numbers,' ')[1,"start"])-2
   }else{
@@ -82,15 +84,15 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
 
   n<-str_length(numbers)
   
-  tb_border<-asciiruler:::glue(p,asciiruler:::glue(asciiruler:::repme(d,n)),p)
-  sparse_tick_marks<-asciiruler:::glue(e,asciiruler:::spaces(left_margin),substr(asciiruler:::blocks(asciiruler:::glue(asciiruler:::repme(asciiruler:::glue(b,asciiruler:::spaces(sparse_ticks-1)),n)),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
+  tb_border<-glue(p,glue(repme(d,n)),p)
+  sparse_tick_marks<-glue(e,spaces(left_margin),substr(blocks(glue(repme(glue(b,spaces(sparse_ticks-1)),n)),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
   
-  #prefer to see dense ticks even before the 0 in -30 unless dealing with asciiruler:::blocks
-  edge_ticks<-function(){if(block_space>0){return(w)}else{return(b)}}
+  #prefer to see dense ticks even before the 0 in -30 unless dealing with blocks
+  edge_ticks<-function(){if(block_space>0){return(' ')}else{return(b)}}
   
-  dense_tick_marks<-asciiruler:::glue(e,asciiruler:::repme(edge_ticks(),left_margin),substr(asciiruler:::blocks(asciiruler:::repme(b,n),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
+  dense_tick_marks<-glue(e,repme(edge_ticks(),left_margin),substr(blocks(repme(b,n),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
   width<-str_length(dense_tick_marks)
-  numbers<-asciiruler:::glue(e,numbers,e)
+  numbers<-glue(e,numbers,e)
   sparse_bool<-!(is.null(sparse_ticks) | sparse_ticks==0)
   log_vector<-c(borders,dense_ticks,sparse_bool,TRUE,borders)
   content<-c(tb_border,dense_tick_marks,sparse_tick_marks,numbers,tb_border)[log_vector]
@@ -101,20 +103,30 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
   structure(list(output=paste(content,collapse=line_break),content=content,left_margin=left_margin,width=width), class = "asciiruler")
 }
 
+#' @export
 default.asciiruler<-function(x){x$output}
+
+#' @export
 print.asciiruler<-function(x,...){cat(x$output,...)}
+
+#' @export
 as.character.asciiruler<-function(x,...){as.character(x$output)}
 
 #http://stackoverflow.com/questions/21890835/how-do-i-dispatch-cat-in-r-s3
+#' @export
 cat <- function(..., file = "", sep = " ", fill = FALSE, labels = NULL,
                 append = FALSE) {
   UseMethod("cat")
 }
+
+#' @export
 cat.default <- function(..., file = "", sep = " ", fill = FALSE, labels = NULL,
                         append = FALSE) {
   base::cat(..., file = file, sep = sep, fill = fill, labels = labels, 
             append = append)
 }
+
+#' @export
 cat.asciiruler <- function(..., file = "", sep = " ", fill = FALSE, labels = NULL,
                     append = FALSE) {
   dots <- list(...)
@@ -122,31 +134,40 @@ cat.asciiruler <- function(..., file = "", sep = " ", fill = FALSE, labels = NUL
   #do.call(function(x){base::cat(x[['output']])},dots)
 }
 
+#' @export
 width<-function(x,...) UseMethod("width")
+
+#' @export
 width.asciiruler<-function(x){x$width}
 
 
 #' Generate a GenBank sequence block
-#'     1    6     11   16    21   26    31   36    41   46    51   56   
-#'     |    |     |    |     |    |     |    |     |    |     |    |    
-#'     |||||||||| |||||||||| |||||||||| |||||||||| |||||||||| ||||||||||
-#'   1 GATCACAGGT CTATCACCCT ATTAACCACT CACGGGAGCT CTCCATGCAT TTGGTATTTT
-#'  61 CGTCTGGGGG GTGTGCACGC GATAGCATTG CGAGACGCTG GAGCCGGAGC ACCCTATGTC
-#' 121 GCAGTATCTG TCTTTGATTC CTGCCCCATC CTATTATTTA TCGCACCTAC GTTCAATATT
-#' 181 ACAGGCGAAC ATACTTACTA AAGTGTGTTA ATTAATTAAT GCTTGTAGGA CATAATAATA
-#' 241 ACAATTGAAT GTCTGCACAG CCGCTTTCCA CACAGACATC ATAACAAAAA ATTTCCACCA
-#' 301 AACCCCCCCT CCCCCGCTTC TGGCCACAGC ACTTAAACAC ATCTCTGCCA AACCCCAAAA
-#' 361 ACAAAGAACC CTAACACCAG CCTAACCAGA TTTCAAATTT TATCTTTTGG CGGTATGCAC
-#' 421 TTTTAACAGT CACCCCCCAA CTAACACATT ACTTTCCCCT CCCACTCCCA TACTACTAAT
-#' 481 CTCATCAATA CAACCCCCGC CCATCCTACC CAGCACACAC ACCGCTGCTA ACCCCATACC
-#' 541 CCGAACCAAC CAAACCCCAA AGACACCCCC CACAGTTTAT GTAGCTTACC TCCTCAAAGC
-#' 601 AATACACTGA AAATGTTTAG ACGGGCTCAC
+#' 
+#''   \preformatted{
+#''     1    6     11   16    21   26    31   36    41   46    51   56   
+#''     |    |     |    |     |    |     |    |     |    |     |    |    
+#''     |||||||||| |||||||||| |||||||||| |||||||||| |||||||||| ||||||||||
+#''   1 GATCACAGGT CTATCACCCT ATTAACCACT CACGGGAGCT CTCCATGCAT TTGGTATTTT
+#''  61 CGTCTGGGGG GTGTGCACGC GATAGCATTG CGAGACGCTG GAGCCGGAGC ACCCTATGTC
+#'' 121 GCAGTATCTG TCTTTGATTC CTGCCCCATC CTATTATTTA TCGCACCTAC GTTCAATATT
+#'' 181 ACAGGCGAAC ATACTTACTA AAGTGTGTTA ATTAATTAAT GCTTGTAGGA CATAATAATA
+#'' 241 ACAATTGAAT GTCTGCACAG CCGCTTTCCA CACAGACATC ATAACAAAAA ATTTCCACCA
+#'' 301 AACCCCCCCT CCCCCGCTTC TGGCCACAGC ACTTAAACAC ATCTCTGC
+#'' }
 #' @param start, end substring start and end
 #' @param blocksize number of characters in each block
 #' @param sep space character between blocks
 #' @param line_break the line break character(s)
 #' @param ruler display an ascii ruler
 #' @return delimited GenBank block string ready to cat
+#' @examples
+#' my_sequence<-'GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTTCGTCTGGGGG
+#' GTATGCACGCGATAGCATTGCGAGACGCTGGAGCCGGAGCACCCTATGTCGCAGTATCTGTCTTTGATTC
+#' CTGCCTCATCCTATTATTTATCGCACCTACGTTCAATATTACAGGCGAACATACTTACTAAAGTGTGTTA
+#' ATTAATTAATGCTTGTAGGACATAATAATAACAATTGAATGTCTGCACAGCCACTTTCCACACAGACATC'
+#' my_seqblock<-genbank_seqblock(my_sequence)
+#' cat(my_seqblock)
+#' @export
 genbank_seqblock<-function(string,start=1L,end=-1L,blocksize=10L,width=60L,sep=" ",line_break="\n",ruler=TRUE,...){
   if (length(string) == 0L || length(start) == 0L || length(end) == 0L) {
     return(vector("character", 0L))
@@ -158,33 +179,34 @@ genbank_seqblock<-function(string,start=1L,end=-1L,blocksize=10L,width=60L,sep="
   if(!is.na(start) & start < 0L){start <- start + len + 1L}
   if(!is.na(end) & end < 0L){end<-end+len+1L}
   
+  #remove whitespace
+  string<-str_replace_all(string,'\\s','')
+  
   subseq<-substring(string, start, end)
   
   #if a seq ends at 1000-1060 and width is 60 it must be at least 4 digits wide
   offset_char_width<-str_length(as.character(end-width))
   linestarts<-seq(start,end,by=width)
-  linenumbers<-sprintf(asciiruler:::glue('%',offset_char_width,'s'),linestarts)
-  lineends<-asciiruler:::seq_inclusive(from=start+width-1,to=end,by=width)
+  linenumbers<-sprintf(glue('%',offset_char_width,'s'),linestarts)
+  lineends<-seq_inclusive(from=start+width-1,to=end,by=width)
   lines<-substring(subseq,linestarts,lineends)
 
-  textblocks<-sapply(lines,asciiruler:::blocks,sep=sep,blocksize=blocksize)
+  textblocks<-sapply(lines,blocks,sep=sep,blocksize=blocksize)
   bound<-rbind(num=linenumbers,text=textblocks)
   ascii<-''
   if(ruler){
     ascii<-asciiruler(1,high=width,sparse_ticks=5,block_space=2,numbers_down=FALSE)
-    asciishift<-paste(asciiruler:::repme(' ',offset_char_width),ascii$content,collapse=line_break)
+    asciishift<-paste(repme(' ',offset_char_width),ascii$content,collapse=line_break)
     return(paste(asciishift,paste(as.list(bound[1,]),as.list(bound[2,]),sep=" ",collapse=line_break),sep=line_break))
   }
   return(paste(as.list(bound[1,]),as.list(bound[2,]),sep=" ",collapse=line_break))
 }
 
-#' This is like seq except it will always include the 'to'
-#' > seq(1,30,by=10)
-#' [1]  1 11 21
-#' > asciiruler:::seq_inclusive(1,30,by=10)
-#' [1]  1 11 21 31
-#' @param from, to start and end values
-#' @param by increment value
+#This is like seq except it will always include the 'to'
+#> seq(1,30,by=10)
+#[1]  1 11 21
+#> seq_inclusive(1,30,by=10)
+#[1]  1 11 21 31
 seq_inclusive<-function(from,to,by){
   set<-seq(from,to,by)
   i<-set[length(set)]+by
@@ -195,27 +217,25 @@ seq_inclusive<-function(from,to,by){
   return(set)
 }
 
-#' Paste with logical defaults
+#Paste with logical defaults
 glue<-function(...,sep="",collapse=""){
   strings<-list(...)
   do.call("paste", c(strings, list(sep = sep, collapse = collapse)))
 }
 
 repme<-function(this,manyTimes){
-  return(asciiruler:::glue(rep(this,manyTimes)))
+  return(glue(rep(this,manyTimes)))
 }
 
 spaces<-function(n){
-  asciiruler:::glue(repme(' ',n))
+  glue(repme(' ',n))
 }
-#' Break line of text into blocks of size blocksize
-#' @param line text
-#' @param blocksize number of characters in each block
-#' @param sep space character between blocks
+
+#Break line of text into blocks of size blocksize
 blocks<-function(line,blocksize=10L,sep=" "){
     if(blocksize<=0){return(line)}
     blockstarts<-seq(1,str_length(line),by=blocksize)
     minLength<-max(blocksize,str_length(line))
-    blockends<-asciiruler:::seq_inclusive(from=blocksize,to=minLength,by=blocksize)
+    blockends<-seq_inclusive(from=blocksize,to=minLength,by=blocksize)
     paste(substring(line,blockstarts,blockends),collapse=sep)
 }

@@ -1,11 +1,15 @@
 Package: asciiruler
 Type: Package
-Title: Render an ascii ruler and GenBank sequence blocks
+Title: Render an ascii ruler
 Version: 0.1
 Date: 2014-02-18
 Author: Jeremy Leipzig <leipzig@gmail.com>
 Maintainer: Jeremy Leipzig <leipzig@gmail.com>
-Description: Render an ascii ruler and GenBank sequence blocks
+Description: Render an ascii ruler
 License: MIT
+Depends:
+    R (>= 2.14)
+Imports:
+    stringr
 Collate:
     'asciiruler.R'

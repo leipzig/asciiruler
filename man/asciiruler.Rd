@@ -3,13 +3,12 @@
 \title{Generate an ascii ruler}
 \usage{
   asciiruler(low = 0L, high = 50L, sparse_ticks = 5L,
-    dense_ticks = TRUE, block_ticks = 0L, borders = FALSE,
-    numbers_down = TRUE, line_break = "\n")
+    dense_ticks = TRUE, block_space = 0L, borders = FALSE,
+    numbers_down = TRUE, line_break = "\n",
+    strict_width = FALSE)
 }
 \arguments{
-  \item{low}{range start}
-
-  \item{high}{range end}
+  \item{low,}{high range start and end}
 
   \item{sparse_ticks}{intermittent ticks appear every
   sparse_ticks, set to 0 to hide row}
@@ -17,9 +16,9 @@
   \item{dense_ticks}{display a row of ticks at every
   position}
 
-  \item{block_ticks}{break up the ruler with a space every
-  block_ticks encountered, a multiple of sparse_ticks, set
-  to 0 to disable}
+  \item{block_space}{break up the ruler with a space every
+  block_space blocks encountered, a multiple of
+  sparse_ticks, set to 0 to disable}
 
   \item{display}{borders}
 
@@ -27,12 +26,21 @@
   below the ticks}
 
   \item{line_break}{the line break character(s)}
+
+  \item{strict_width}{hide numbers whose display would
+  force the ruler to be wider than width(high-low)}
 }
 \value{
-  asciiruler object
+  asciiruler object with the following slots: \describe{
+  \item{output}{delimited ruler string ready to cat}
+  \item{content}{vector of lines comprising the ruler}
+  \item{width}{width of ruler} \item{leftmargin}{position
+  of the first tick relative to the left edge of the ruler}
+  }
 }
 \description{
-\preformatted{v borders
+\preformatted{
+   v borders
    +-----------------------------------------------------------------+<-borders
    |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||<-dense_ticks
    |  |    |    |    |    |    |    |    |    |    |    |    |    |  |<-sparse_ticks
