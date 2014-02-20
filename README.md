@@ -21,11 +21,11 @@ An ascii ruler is for measuring text and is especially useful for sequence analy
     my_seqblock<-genbank_seqblock(my_sequence)
     cat(my_seqblock)
     
-      1    6     11   16    21   26    31   36    41   46    51   56   
-	    |    |     |    |     |    |     |    |     |    |     |    |    
-	    |||||||||| |||||||||| |||||||||| |||||||||| |||||||||| ||||||||||
-	  1 GATCACAGGT CTATCACCCT ATTAACCACT CACGGGAGCT CTCCATGCAT TTGGTATTTT
-	 61 CGTCTGGGGG GTATGCACGC GATAGCATTG CGAGACGCTG GAGCCGGAGC ACCCTATGTC
-	121 GCAGTATCTG TCTTTGATTC CTGCCTCATC CTATTATTTA TCGCACCTAC GTTCAATATT
-	181 ACAGGCGAAC ATACTTACTA AAGTGTGTTA ATTAATTAAT GCTTGTAGGA CATAATAATA
-	241 ACAATTGAAT GTCTGCACAG CCACTTTCCA CACAGACATC
+        1    6     11   16    21   26    31   36    41   46    51   56   
+	      |    |     |    |     |    |     |    |     |    |     |    |    
+	      |||||||||| |||||||||| |||||||||| |||||||||| |||||||||| ||||||||||
+	    1 GATCACAGGT CTATCACCCT ATTAACCACT CACGGGAGCT CTCCATGCAT TTGGTATTTT
+	   61 CGTCTGGGGG GTATGCACGC GATAGCATTG CGAGACGCTG GAGCCGGAGC ACCCTATGTC
+	  121 GCAGTATCTG TCTTTGATTC CTGCCTCATC CTATTATTTA TCGCACCTAC GTTCAATATT
+	  181 ACAGGCGAAC ATACTTACTA AAGTGTGTTA ATTAATTAAT GCTTGTAGGA CATAATAATA
+	  241 ACAATTGAAT GTCTGCACAG CCACTTTCCA CACAGACATC
