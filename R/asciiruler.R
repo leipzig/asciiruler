@@ -38,7 +38,7 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
     #returns special right flank padding for ends and kingpin
     right_flank<-function(x){
       #last number should be right flanked to get to high but no further
-      if(x<high & x+sparse_ticks>high){return(spaces(abs(high-x-str_length(as.character(x))+1)))}
+      if(x<high & x+sparse_ticks>high){return(spaces(abs(high-x-stringr:::str_length(as.character(x))+1)))}
       #the highest non-positive position
       #should be flanked by spaces on both sides
       if(x<=0 & x+sparse_ticks>0){return(spaces(sparse_ticks-1))}
@@ -70,19 +70,19 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
     }
     
     strictify<-function(i){
-      if((i==low | i==high) & str_length(as.character(i))>1 & strict_width==TRUE){return('_')}
+      if((i==low | i==high) & stringr:::str_length(as.character(i))>1 & strict_width==TRUE){return('_')}
       return(i)
     }
     glue(blockpad(i),sprintf(left_or_right(i),strictify(i)),right_flank(i))
   }  
-  numbers<-str_replace_all(glue(str_trim(glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left")),'_',' ')
+  numbers<-stringr:::str_replace_all(glue(stringr:::str_trim(glue(sapply(seq(low,high,by=sparse_ticks),pad)),side="left")),'_',' ')
   if(substr(numbers,1,1)==d){
-    left_margin<-unname(str_locate(numbers,' ')[1,"start"])-2
+    left_margin<-unname(stringr:::str_locate(numbers,' ')[1,"start"])-2
   }else{
     left_margin<-0
   }
 
-  n<-str_length(numbers)
+  n<-stringr:::str_length(numbers)
   
   tb_border<-glue(p,glue(repme(d,n)),p)
   sparse_tick_marks<-glue(e,spaces(left_margin),substr(blocks(glue(repme(glue(b,spaces(sparse_ticks-1)),n)),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
@@ -91,7 +91,7 @@ asciiruler<-function(low=0L,high=50L,sparse_ticks=5L,dense_ticks=TRUE,block_spac
   edge_ticks<-function(){if(block_space>0){return(' ')}else{return(b)}}
   
   dense_tick_marks<-glue(e,repme(edge_ticks(),left_margin),substr(blocks(repme(b,n),blocksize=block_space*sparse_ticks),1,n-left_margin),e)
-  width<-str_length(dense_tick_marks)
+  width<-stringr:::str_length(dense_tick_marks)
   numbers<-glue(e,numbers,e)
   sparse_bool<-!(is.null(sparse_ticks) | sparse_ticks==0)
   log_vector<-c(borders,dense_ticks,sparse_bool,TRUE,borders)
@@ -174,18 +174,18 @@ genbank_seqblock<-function(string,start=1L,end=-1L,blocksize=10L,width=60L,sep="
   }
   
   # Convert negative values into actual positions
-  len <- str_length(string)
+  len <- stringr:::str_length(string)
   
   if(!is.na(start) & start < 0L){start <- start + len + 1L}
   if(!is.na(end) & end < 0L){end<-end+len+1L}
   
   #remove whitespace
-  string<-str_replace_all(string,'\\s','')
+  string<-stringr:::str_replace_all(string,'\\s','')
   
   subseq<-substring(string, start, end)
   
   #if a seq ends at 1000-1060 and width is 60 it must be at least 4 digits wide
-  offset_char_width<-str_length(as.character(end-width))
+  offset_char_width<-stringr:::str_length(as.character(end-width))
   linestarts<-seq(start,end,by=width)
   linenumbers<-sprintf(glue('%',offset_char_width,'s'),linestarts)
   lineends<-seq_inclusive(from=start+width-1,to=end,by=width)
@@ -234,8 +234,8 @@ spaces<-function(n){
 #Break line of text into blocks of size blocksize
 blocks<-function(line,blocksize=10L,sep=" "){
     if(blocksize<=0){return(line)}
-    blockstarts<-seq(1,str_length(line),by=blocksize)
-    minLength<-max(blocksize,str_length(line))
+    blockstarts<-seq(1,stringr:::str_length(line),by=blocksize)
+    minLength<-max(blocksize,stringr:::str_length(line))
     blockends<-seq_inclusive(from=blocksize,to=minLength,by=blocksize)
     paste(substring(line,blockstarts,blockends),collapse=sep)
 }
