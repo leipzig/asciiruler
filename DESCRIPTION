@@ -13,3 +13,6 @@ Imports:
     stringr
 Collate:
     'asciiruler.R'
+    'alignment.R'
+    'genbank.R'
+    'utils.R'
