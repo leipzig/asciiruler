@@ -10,7 +10,7 @@ An ascii ruler is for measuring text and is especially useful for sequence analy
 
 ```
 library("devtools")
-install_github("asciiruler","leipzig")
+install_github("leipzig/asciiruler")
 library("asciiruler")
 asciiruler(low=1,high=60)
 ```
