@@ -11,20 +11,21 @@ An ASCII ruler is for measuring text and is especially useful for sequence analy
 
 
 ```
-library("devtools")
-install_github("leipzig/asciiruler")
+devtools::install_github("leipzig/asciiruler")
 library("asciiruler")
-asciiruler(low=1,high=60)
+asciiruler(low=-30,high=30,borders=TRUE)
 ```
 
 ```
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-|    |    |    |    |    |    |    |    |    |    |    |    
-1    6    11   16   21   26   31   36   41   46   51   56   
++----------------------------------------------------------------+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+|  |    |    |    |    |    |    |    |    |    |    |    |    | |
+|-30  -25  -20  -15  -10   -5    0    5    10   15   20   25   30|
++----------------------------------------------------------------+
 ```
 
 ```
-my_sequence<-
+my_sequence<-asciiruler(low=1,high=60)
 'GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTTCGTCTGGGGG
 GTATGCACGCGATAGCATTGCGAGACGCTGGAGCCGGAGCACCCTATGTCGCAGTATCTGTCTTTGATTC
 CTGCCTCATCCTATTATTTATCGCACCTACGTTCAATATTACAGGCGAACATACTTACTAAAGTGTGTTA
