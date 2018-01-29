@@ -1,8 +1,8 @@
-# asciiruler: Render an ascii ruler
+# asciiruler: Render an ASCII Ruler
 
 ## Description
 
-An ascii ruler is for measuring text and is especially useful for sequence analysis. Methods `asciiruler` to create ascii rulers and `genbank_seqblock` to create "GenBank sequence blocks", known for their distinctive column-structure, are provided.
+An ASCII ruler is for measuring text and is especially useful for sequence analysis. Methods `asciiruler` to create ASCII rulers and `genbank_seqblock` to create "GenBank sequence blocks", known for their distinctive column-structure, are provided.
 
 ## Usage
 
