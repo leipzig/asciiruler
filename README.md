@@ -1,5 +1,7 @@
 # asciiruler: Render an ASCII Ruler
 
+[![Build Status](https://travis-ci.org/leipzig/asciiruler.svg?branch=master)](https://travis-ci.org/leipzig/asciiruler)
+
 ## Description
 
 An ASCII ruler is for measuring text and is especially useful for sequence analysis. Methods `asciiruler` to create ASCII rulers and `genbank_seqblock` to create "GenBank sequence blocks", known for their distinctive column-structure, are provided.
