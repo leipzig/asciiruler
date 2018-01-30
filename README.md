@@ -1,20 +1,30 @@
 # asciiruler: Render an ASCII Ruler
 
 [![Build Status](https://travis-ci.org/leipzig/asciiruler.svg?branch=master)](https://travis-ci.org/leipzig/asciiruler)
+[![codecov](https://codecov.io/gh/leipzig/asciiruler/branch/master/graph/badge.svg)](https://codecov.io/gh/leipzig/asciiruler)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/asciiruler)](http://www.r-pkg.org/pkg/asciiruler)
 
 ## Description
 
 An ASCII ruler is for measuring text and is especially useful for sequence analysis. Methods `asciiruler` to create ASCII rulers and `genbank_seqblock` to create "GenBank sequence blocks", known for their distinctive column-structure, are provided.
 
+
+## Installation
+```
+# Install released version from CRAN:
+install.packages("asciiruler")
+
+# Install latest commit from Github:
+devtools::install_github("leipzig/asciiruler")
+```
+
 ## Usage
 
+### asciiruler
 ```
-devtools::install_github("leipzig/asciiruler")
 library("asciiruler")
 asciiruler(low=-30,high=30,borders=TRUE)
-```
 
-```
 +----------------------------------------------------------------+
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 |  |    |    |    |    |    |    |    |    |    |    |    |    | |
@@ -22,6 +32,7 @@ asciiruler(low=-30,high=30,borders=TRUE)
 +----------------------------------------------------------------+
 ```
 
+### genbank_seqblock
 ```
 my_sequence<-
 'GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTTCGTCTGGGGG
