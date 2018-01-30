@@ -5,7 +5,7 @@ Version: 0.2
 Date: 2018-01-29
 Author: Jeremy Leipzig <leipzig@gmail.com>
 Maintainer: Jeremy Leipzig <leipzig@gmail.com>
-Description: Render an ASCII ruler. An ASCII ruler is for measuring text and is especially useful for sequence analysis.
+Description: An ASCII ruler is for measuring text and is especially useful for sequence analysis. Included in this package are methods to create ASCII rulers and associated GenBank sequence blocks, multi-column text displays that make it easy to locate nucleotides by position.
 License: GPL-3 | file LICENSE
 Depends:
     R (>= 2.14)

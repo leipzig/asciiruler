@@ -8,8 +8,6 @@ An ASCII ruler is for measuring text and is especially useful for sequence analy
 
 ## Usage
 
-
-
 ```
 devtools::install_github("leipzig/asciiruler")
 library("asciiruler")
@@ -25,7 +23,7 @@ asciiruler(low=-30,high=30,borders=TRUE)
 ```
 
 ```
-my_sequence<-asciiruler(low=1,high=60)
+my_sequence<-
 'GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTTCGTCTGGGGG
 GTATGCACGCGATAGCATTGCGAGACGCTGGAGCCGGAGCACCCTATGTCGCAGTATCTGTCTTTGATTC
 CTGCCTCATCCTATTATTTATCGCACCTACGTTCAATATTACAGGCGAACATACTTACTAAAGTGTGTTA
