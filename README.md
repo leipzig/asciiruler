@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/leipzig/asciiruler.svg?branch=master)](https://travis-ci.org/leipzig/asciiruler)
 [![codecov](https://codecov.io/gh/leipzig/asciiruler/branch/master/graph/badge.svg)](https://codecov.io/gh/leipzig/asciiruler)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/asciiruler)](http://www.r-pkg.org/pkg/asciiruler)
+[![DOI](https://zenodo.org/badge/17004042.svg)](https://zenodo.org/badge/latestdoi/17004042)
 
 ## Description
 
